@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Components · SSUD UI</title>
+  <link rel="stylesheet" href="../tokens.css">
+  <link rel="stylesheet" href="../components.css">
+  <link rel="stylesheet" href="pages.css">
+  <script defer src="catalogue.js"></script>
+  <script defer src="../disclosures.js"></script>
+</head>
+<body class="ssud-ui">
+  <div class="page adaptive-page catalogue">
+    <header>
+      <nav class="kit-nav" aria-label="UI kit examples">
+        <a href="index.html" aria-current="page">Components</a><a href="../example/index.html">Files</a><a href="settings.html">Settings</a><a href="transfers.html">Transfers</a>
+      </nav>
+      <h1>Components</h1>
+      <p class="lede">Preview each pattern and copy its HTML. Interactive examples use local sample data.</p>
+      <div>
+        <button type="button" class="secondary disclosure-toggle" data-disclosure="650" aria-controls="categories" aria-expanded="true">Categories</button>
+        <nav id="categories" class="kit-nav" aria-label="Component categories">
+          <a href="#buttons">Buttons</a><a href="#fields">Forms</a><a href="#navigation">Navigation</a><a href="#browse">Lists and search</a><a href="#feedback">Feedback</a><a href="#overlays">Dialogs and files</a><a href="#responsive">Responsive layout</a>
+        </nav>
+      </div>
+    </header>
+    <main>
+      <section class="panel stack" id="buttons">
+        <h2>Buttons and links</h2>
+        <p>Use a primary button for the main action, secondary for supporting actions, and danger for confirmed destructive actions. Use links for navigation.</p>
+        <p class="muted">States · default, hover, focus, disabled. Give every icon-only control an accessible name.</p>
+        <div class="sample">
+          <div class="actions">
+            <button type="button" class="primary" data-preview="Changes saved.">Save</button>
+            <button type="button" class="secondary" data-preview="Changes cancelled.">Cancel</button>
+            <button type="button" class="danger" data-preview="Example item removed.">Remove</button>
+            <button type="button" class="secondary icon-button" aria-label="Refresh" data-preview="List refreshed.">↻</button>
+            <button type="button" class="secondary" disabled>Unavailable</button>
+            <a href="#navigation">Go to navigation examples</a>
+          </div>
+          <p role="status" class="muted" id="button-status"></p>
+        </div>
+      </section>
+
+      <section class="panel stack" id="fields">
+        <h2>Inputs, choices and field errors</h2>
+        <p>Use persistent labels, native inputs and grouped options. Put a message next to an invalid field and link to it from the error summary in longer forms.</p>
+        <p class="muted">States · empty, edited, selected, invalid and disabled. The <a href="settings.html">settings example</a> handles validation and focus.</p>
+        <div class="sample stack">
+          <div class="field">
+            <label for="sample-name">Workspace name</label>
+            <input id="sample-name" required aria-invalid="true" aria-describedby="sample-error">
+            <p id="sample-error" class="error-text">Enter a workspace name.</p>
+          </div>
+          <div class="field"><label for="sample-count">Rows per page</label><input id="sample-count" type="number" min="5" max="100" value="20"></div>
+          <div class="field"><label for="sample-layout">Layout</label><select id="sample-layout"><option>Compact</option><option>Comfortable</option></select></div>
+          <fieldset class="stack">
+            <legend>Visibility</legend>
+            <label><input type="radio" name="sample-visibility" checked> Private</label>
+            <label><input type="radio" name="sample-visibility"> Shared</label>
+          </fieldset>
+          <label><input type="checkbox" checked> Show hidden files</label>
+          <div class="field"><label for="sample-notes">Notes</label><textarea id="sample-notes" rows="2"></textarea></div>
+        </div>
+      </section>
+
+      <section class="panel stack" id="navigation">
+        <h2>Sidebar, breadcrumbs and tabs</h2>
+        <p>Use the sidebar for destinations, breadcrumbs for hierarchy and tabs for related views in one screen.</p>
+        <p class="muted">States · current page, selected tab and inactive tabs. Switch tabs with Left, Right, Home or End.</p>
+        <div class="sample stack">
+          <aside class="panel"><nav aria-label="Workspace destinations"><a href="../example/index.html">Files</a><a href="settings.html">Settings</a><a href="index.html" aria-current="page">Components</a></nav></aside>
+          <nav aria-label="Breadcrumb"><a href="../example/index.html">Home</a><span aria-hidden="true">/</span><span aria-current="page">Reports</span></nav>
+          <div class="actions" role="tablist" aria-label="Report views">
+            <button type="button" id="tab-overview" role="tab" aria-controls="overview" aria-selected="true">Overview</button>
+            <button type="button" id="tab-activity" role="tab" aria-controls="activity" aria-selected="false" tabindex="-1">Activity</button>
+          </div>
+          <div id="overview" role="tabpanel" aria-labelledby="tab-overview" tabindex="0">3 shared reports.</div>
+          <div id="activity" role="tabpanel" aria-labelledby="tab-activity" tabindex="0" hidden>No recent changes.</div>
+        </div>
+      </section>
+
+      <section class="panel stack" id="browse">
+        <h2>Search, table, pagination and row actions</h2>
+        <p>Keep filters beside search. Use a native table with sorting announced on the active column and a visible trigger for row actions.</p>
+        <p class="muted">States · filtered, sorted, previous/next unavailable, and actions open. See the <a href="../example/index.html">file workspace</a> for the complete flow.</p>
+        <div class="sample stack">
+          <form class="actions" role="search" aria-label="Sample files" id="sample-search">
+            <label class="field">Name <input type="search" name="query"></label>
+            <label class="field">Type <select name="type"><option value="">All</option><option>Document</option><option>Image</option></select></label>
+            <button type="submit" class="primary">Search</button>
+          </form>
+          <div class="table-region" role="region" tabindex="0" aria-label="Sample results">
+            <table class="data-table listing responsive-list">
+              <thead><tr><th scope="col" id="sample-sort-heading" aria-sort="ascending"><button type="button" class="text-button" id="sample-sort">Name ↑</button></th><th scope="col">Type</th><th scope="col">Actions</th></tr></thead>
+              <tbody>
+                <tr><td>Budget.pdf</td><td>Document</td><td><details><summary>Actions<span class="muted"> · Budget.pdf</span></summary><button type="button" class="text-button" data-row-action>Show details</button></details></td></tr>
+                <tr><td>Studio.jpg</td><td>Image</td><td><details><summary>Actions<span class="muted"> · Studio.jpg</span></summary><button type="button" class="text-button" data-row-action>Show details</button></details></td></tr>
+                <tr lang="ko"><td>회의록.txt</td><td lang="en">Document</td><td lang="en"><details><summary>Actions<span class="muted"> · 회의록.txt</span></summary><button type="button" class="text-button" data-row-action>Show details</button></details></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <nav class="actions" aria-label="Sample result pages">
+            <button type="button" class="secondary" id="sample-prev" disabled>Previous</button>
+            <button type="button" class="secondary" id="sample-next">Next</button>
+          </nav>
+          <p class="muted" role="status" id="sample-result">3 results</p>
+        </div>
+      </section>
+
+      <section class="panel stack" id="feedback">
+        <h2>Empty states, errors and progress</h2>
+        <p>State what happened and give a recovery action where possible. Label progress and show a percentage only when a total is known.</p>
+        <p class="muted">States · no matches, recoverable failure and determinate or indeterminate progress.</p>
+        <div class="sample stack">
+          <div class="empty-state"><p>No matching files.</p><a href="#browse">Review search and filters</a></div>
+          <p class="notice-box error-text">Could not open the example folder. <a href="../example/index.html">Open file workspace</a></p>
+          <label class="field">Uploading · 60% <progress value="60" max="100"></progress></label>
+          <label class="field">Checking files… <progress></progress></label>
+        </div>
+      </section>
+
+      <section class="panel stack" id="overlays">
+        <h2>Confirmation dialog and file selection</h2>
+        <p>Confirm the target and destination before a transfer. Give focus to Cancel on open and return it to the trigger on close.</p>
+        <p class="muted">States · no files, files selected, confirmed or cancelled. Try simulated failure and retry in the <a href="transfers.html">transfer queue</a>.</p>
+        <div class="sample stack">
+          <label class="file-pick">Select files <input id="sample-files" type="file" multiple></label>
+          <div class="actions"><button type="button" class="primary" id="sample-open">Review upload</button></div>
+          <p role="status" id="sample-upload-status" class="muted"></p>
+          <dialog class="responsive-dialog" id="sample-dialog" aria-labelledby="sample-dialog-title">
+            <form method="dialog">
+              <h3 id="sample-dialog-title">Confirm upload</h3>
+              <p id="sample-destination">Destination /Studio</p>
+              <div class="actions"><button class="secondary" value="cancel" autofocus>Cancel</button><button class="primary" value="start">Start upload</button></div>
+            </form>
+          </dialog>
+        </div>
+      </section>
+      <section class="panel stack" id="responsive">
+        <h2>Responsive layout</h2>
+        <p>Keep controls in reading order when columns stack. Use a disclosure for secondary settings and preserve their values as the viewport changes.</p>
+        <div class="sample stack">
+          <div class="adaptive-columns">
+            <div class="field">
+              <label for="responsive-query">Search term</label>
+              <input id="responsive-query" type="search" value="회의록">
+            </div>
+            <div class="stack">
+              <div>
+                <button type="button" class="secondary disclosure-toggle" data-disclosure="650" data-expand-at="400"
+                  aria-controls="responsive-filters" aria-expanded="true">Filters</button>
+              </div>
+              <div id="responsive-filters" class="filter-fields">
+                <label class="field">Type <select><option>All</option><option>Document</option><option>Folder</option></select></label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

@@ -1,0 +1,36 @@
+.page { max-width: 960px; margin: 0 auto; overflow-wrap: anywhere; }
+.page > header, .page > main:not(.adaptive-columns) { display: grid; gap: 12px; }
+.page > header { margin-bottom: 16px; }
+.page h1 { font-size: var(--ssud-text-title); }
+.page h2 { font-size: 1rem; }
+.page h3 { font-size: var(--ssud-text-body); }
+.page .lede { color: var(--ssud-muted); }
+.form-panel { max-width: 720px; }
+.field-error:empty, .notice-box:empty { display: none; }
+.queue { list-style: none; margin: 0; padding: 0; }
+.queue li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px 12px; padding: 10px 0; border-bottom: 1px solid var(--ssud-border); }
+.queue strong { display: block; font-weight: 600; overflow-wrap: anywhere; }
+.queue progress, .queue-item-error { grid-column: 1 / -1; width: 100%; }
+.queue .muted { font-variant-numeric: tabular-nums; }
+.catalogue section { scroll-margin-top: 12px; }
+.catalogue textarea.snippet { resize: vertical; display: block; width: 100%; font: .75rem/1.45 ui-monospace, monospace; }
+.catalogue details > summary { min-height: 24px; }
+.catalogue .sample { padding: 10px; border: 1px solid var(--ssud-border); border-radius: var(--ssud-radius); }
+.catalogue .sample h3 { margin-bottom: 6px; }
+.catalogue .sample nav { display: flex; flex-wrap: wrap; gap: 6px 12px; }
+.catalogue .sample nav a { display: inline-flex; min-height: 24px; align-items: center; }
+
+.page .field, .page .notice-box, .page button { scroll-margin-block: 12px; }
+.page .actions > button { max-width: 100%; }
+.page #error-links a { display: inline-block; padding-block: 4px; }
+#categories:not([hidden]) { margin-top: 4px; }
+#selection { padding-inline-start: 20px; overflow-wrap: anywhere; }
+.catalogue .listing .muted { overflow-wrap: anywhere; }
+
+@media (min-width: 651px) {
+  .transfer-layout.adaptive-columns { grid-template-columns: minmax(220px, 1fr) minmax(0, 2fr); }
+}
+@media (pointer: coarse) {
+  .page #error-links a { min-height: 44px; padding-block: 10px; }
+  .page input[type="file"]::file-selector-button { min-height: 34px; }
+}

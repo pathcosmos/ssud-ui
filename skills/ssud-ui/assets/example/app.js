@@ -29,6 +29,13 @@ const scroll = byId('table-scroll');
 const transfer = byId('transfer');
 const collator = new Intl.Collator(undefined, { numeric: true });
 
+const pageSize = 5;
+const rowMenu = byId('row-menu');
+let menuTrigger = null;
+rowMenu.addEventListener('beforetoggle', (event) => {
+  menuTrigger?.setAttribute('aria-expanded', String(event.newState === 'open'));
+});
+let page = 0;
 let currentFolder = '';
 let showingResults = false;
 let resultOrigin = null;
@@ -53,8 +60,14 @@ function button(label, action, className = 'text-button') {
 
 function formatSize(bytes) {
   if (bytes < 1000) return `${bytes} B`;
-  if (bytes < 1_000_000) return `${(bytes / 1000).toFixed(1)} KB`;
-  return `${(bytes / 1_000_000).toFixed(1)} MB`;
+  const units = ['KB', 'MB', 'GB', 'TB', 'PB'];
+  let amount = bytes / 1000;
+  let unit = 0;
+  while (amount >= 1000 && unit < units.length - 1) {
+    amount /= 1000;
+    unit += 1;
+  }
+  return `${amount.toFixed(1)} ${units[unit]}`;
 }
 
 function sizeOf(entry) {
@@ -95,6 +108,16 @@ function renderBreadcrumb() {
   }
 }
 
+const compactList = matchMedia('(max-width: 650px)');
+
+function fitNavigationRows() {
+  for (const cell of byId('navigation').querySelectorAll('td')) {
+    cell.colSpan = compactList.matches ? 3 : 4;
+  }
+}
+
+compactList.addEventListener('change', fitNavigationRows);
+
 function renderNavigation() {
   const navigation = byId('navigation');
   navigation.replaceChildren();
@@ -102,21 +125,28 @@ function renderNavigation() {
   const parent = currentFolder.split('/').slice(0, -1).join('/');
   for (const [label, destination] of [['⌂ Home', ''], ['↑ Up one level', parent]]) {
     const cell = navigation.insertRow().insertCell();
-    cell.colSpan = 4;
     cell.append(button(label, () => browse(destination)));
   }
+  fitNavigationRows();
 }
 
 function browse(folder, highlight = null) {
   currentFolder = folder;
+  page = highlight ? -1 : 0;
   target = highlight;
   showingResults = false;
   scroll.scrollTop = 0;
   render();
 }
 
+function rememberResults(item) {
+  if (showingResults) {
+    resultOrigin = { top: scroll.scrollTop, item, page, folder: currentFolder, sort: { ...sort } };
+  }
+}
+
 function openLocation(item) {
-  if (showingResults) resultOrigin = { top: scroll.scrollTop, item, sort: { ...sort } };
+  rememberResults(item);
   browse(item.parent, item);
   byId('files').querySelector('.target .file-name')?.focus();
 }
@@ -127,9 +157,7 @@ function renderItem(item) {
   const name = row.insertCell();
   const nameButton = button('', (event) => {
     if (item.folder) {
-      if (showingResults) resultOrigin = { top: scroll.scrollTop, item, sort: { ...sort } };
-      browse(pathOf(item));
-      scroll.focus();
+      openFolder(item);
       return;
     }
     openTransfer('download', [item], item.parent, event.currentTarget);
@@ -139,6 +167,7 @@ function renderItem(item) {
   icon.setAttribute('aria-hidden', 'true');
   icon.textContent = item.folder ? '▪' : '▫';
   const label = document.createElement('span');
+  label.className = 'row-title';
   label.textContent = item.name;
   nameButton.title = item.name;
   nameButton.append(icon, label);
@@ -150,14 +179,67 @@ function renderItem(item) {
     name.append(location);
   }
   row.insertCell().textContent = formatSize(sizeOf(item));
-  row.insertCell().textContent = item.modified;
+  const modified = row.insertCell();
+  modified.className = 'optional-column';
+  modified.textContent = item.modified;
   const actions = row.insertCell();
-  if (!item.folder) actions.append(button('Download',
-    (event) => openTransfer('download', [item], item.parent, event.currentTarget)));
+  const trigger = button('⋯', (event) => openRowMenu(item, event.currentTarget), 'secondary icon-button');
+  trigger.setAttribute('aria-label', `Actions for ${item.name}`);
+  trigger.setAttribute('aria-controls', rowMenu.id);
+  trigger.setAttribute('aria-expanded', 'false');
+  actions.append(trigger);
   return row;
 }
 
+function openRowMenu(item, trigger) {
+  if (rowMenu.matches(':popover-open')) rowMenu.hidePopover();
+  menuTrigger = trigger;
+  const action = button(item.folder ? 'Open folder' : 'Download', () => {
+    rowMenu.hidePopover();
+    if (!item.folder) openTransfer('download', [item], item.parent, trigger);
+    else openFolder(item);
+  }, 'text-button');
+  const locate = button('Go to location', () => {
+    rowMenu.hidePopover();
+    openLocation(item);
+  }, 'text-button');
+  const details = document.createElement('div');
+  details.className = 'row-details';
+  const title = document.createElement('strong');
+  title.textContent = item.name;
+  const metadata = document.createElement('span');
+  metadata.textContent = `${formatSize(sizeOf(item))} · Modified ${item.modified}`;
+  const parent = document.createElement('div');
+  parent.textContent = displayPath(item.parent);
+  details.append(title, parent, metadata);
+  rowMenu.replaceChildren(details, action, locate);
+  rowMenu.showPopover({ source: trigger });
+  positionRowMenu();
+  action.focus();
+}
+
+function positionRowMenu() {
+  if (!rowMenu.matches(':popover-open')) return;
+  const anchor = menuTrigger.getBoundingClientRect();
+  const width = rowMenu.offsetWidth;
+  const height = rowMenu.offsetHeight;
+  rowMenu.style.inset = 'auto';
+  rowMenu.style.left = `${Math.max(8, Math.min(anchor.right - width, innerWidth - width - 8))}px`;
+  rowMenu.style.top = `${Math.max(8, anchor.bottom + height + 4 < innerHeight
+    ? anchor.bottom + 4 : anchor.top - height - 4)}px`;
+}
+
+window.addEventListener('resize', positionRowMenu);
+scroll.addEventListener('scroll', positionRowMenu);
+
+function openFolder(item) {
+  rememberResults(item);
+  browse(pathOf(item));
+  scroll.focus();
+}
+
 function render() {
+  if (rowMenu.matches(':popover-open')) rowMenu.hidePopover();
   const items = [...folderEntries, ...entries];
   const visible = showingResults ? resultItems(items) : items.filter(({ parent }) => parent === currentFolder);
   const direction = sort.ascending ? 1 : -1;
@@ -165,8 +247,13 @@ function render() {
     ? sizeOf(a) - sizeOf(b)
     : collator.compare(a.name, b.name)));
   byId('files').replaceChildren();
+  const lastPage = Math.max(0, Math.ceil(visible.length / pageSize) - 1);
+  if (page < 0) page = Math.max(0, Math.floor(visible.indexOf(target) / pageSize));
+  page = Math.min(page, lastPage);
+  byId('previous').disabled = page <= 0;
+  byId('next').disabled = page >= lastPage;
   let resultButton;
-  for (const item of visible) {
+  for (const item of visible.slice(page * pageSize, (page + 1) * pageSize)) {
     const row = renderItem(item);
     if (item === resultOrigin?.item) resultButton = row.querySelector('.file-path');
   }
@@ -177,7 +264,9 @@ function render() {
   });
   byId('back').hidden = !resultOrigin || showingResults;
   byId('empty').hidden = Boolean(visible.length);
-  text('result-info', `${visible.length} ${showingResults ? 'results' : 'items'}`);
+  text('result-info', `${visible.length} ${showingResults ? 'results' : 'items'} · Page ${page + 1} of ${lastPage + 1}`);
+  const filterCount = [kind.value, extensions.value.trim()].filter(Boolean).length;
+  text('filter-count', filterCount ? ` (${filterCount})` : '');
   text('home-size', formatSize(entries.reduce((total, file) => total + file.size, 0)));
   text('index-count', `${items.length} indexed`);
   renderBreadcrumb();
@@ -186,6 +275,7 @@ function render() {
 }
 
 function applySearch() {
+  page = 0;
   resultOrigin = null;
   target = null;
   showingResults = [search, kind, extensions].some((field) => field.value.trim());
@@ -243,7 +333,9 @@ byId('home').addEventListener('click', () => {
 });
 byId('back').addEventListener('click', () => {
   if (!resultOrigin) return;
-  const { top, sort: previousSort } = resultOrigin;
+  const { top, page: previousPage, sort: previousSort } = resultOrigin;
+  currentFolder = resultOrigin.folder;
+  page = previousPage;
   showingResults = true;
   sort = previousSort;
   target = null;
@@ -252,8 +344,18 @@ byId('back').addEventListener('click', () => {
   scroll.scrollTop = top;
   (resultButton ?? search).focus({ preventScroll: true });
 });
+for (const [control, direction] of [['previous', -1], ['next', 1]]) {
+  byId(control).addEventListener('click', () => {
+    page += direction;
+    scroll.scrollTop = 0;
+    render();
+    if (byId(control).disabled) scroll.focus();
+  });
+}
+
 for (const column of ['name', 'size']) {
   byId(`sort-${column}`).addEventListener('click', () => {
+    page = 0;
     sort = { column, ascending: sort.column === column ? !sort.ascending : column === 'name' };
     render();
   });

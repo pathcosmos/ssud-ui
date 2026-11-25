@@ -22,12 +22,15 @@
   --ssud-text: #e1e5ec;
   --ssud-muted: #a0a8b4;
   --ssud-border: #343a45;
-  --ssud-control-border: #495363;
+  --ssud-control-border: #626f82;
   --ssud-overlay-border: #515e72;
   --ssud-accent: #9dbbeb;
+  --ssud-focus: #9dbbeb;
+  --ssud-success: #8bd3b9;
+  --ssud-warning: #e5bd7c;
   --ssud-primary: #39669f;
   --ssud-primary-border: #537fb8;
-  --ssud-primary-hover: #4779b6;
+  --ssud-primary-hover: #4374b0;
   --ssud-secondary: #282f3a;
   --ssud-secondary-hover: #343f4e;
   --ssud-danger: #833b3b;

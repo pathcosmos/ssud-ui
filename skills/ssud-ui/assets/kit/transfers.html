@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Transfers · SSUD UI</title>
+  <link rel="stylesheet" href="../tokens.css">
+  <link rel="stylesheet" href="../components.css">
+  <link rel="stylesheet" href="pages.css">
+  <script defer src="transfers.js"></script>
+</head>
+<body class="ssud-ui">
+  <div class="page adaptive-page">
+    <header>
+      <nav class="kit-nav" aria-label="UI kit examples">
+        <a href="index.html">Components</a><a href="../example/index.html">Files</a><a href="settings.html">Settings</a><a href="transfers.html" aria-current="page">Transfers</a>
+      </nav>
+      <h1>Transfer queue</h1>
+      <p class="lede">Simulated transfers to /Studio. File contents stay on this device.</p>
+    </header>
+    <main class="adaptive-columns transfer-layout">
+      <section class="panel stack" aria-labelledby="upload-title">
+        <h2 id="upload-title">Add files</h2>
+        <label class="file-pick" id="drop-zone">Choose or drop files <input type="file" id="files" multiple></label>
+        <div class="actions"><button type="button" class="primary" id="add-sample">Add sample transfer</button></div>
+      </section>
+      <section class="panel stack" aria-labelledby="queue-title">
+        <h2 id="queue-title">Queue</h2>
+        <p id="queue-empty" class="muted">No transfers yet.</p>
+        <ul class="queue" id="queue"></ul>
+        <p id="queue-status" role="status"></p>
+      </section>
+    </main>
+  </div>
+  <dialog class="responsive-dialog" id="confirm" aria-labelledby="confirm-title">
+    <form method="dialog">
+      <h2 id="confirm-title">Confirm upload</h2>
+      <p>Destination /Studio</p>
+      <ul id="selection"></ul>
+      <div class="actions"><button class="secondary" value="cancel" autofocus>Cancel</button><button class="primary" value="start">Start upload</button></div>
+    </form>
+  </dialog>
+</body>
+</html>

@@ -1,0 +1,148 @@
+.ssud-ui {
+  margin: 0;
+  background: var(--ssud-canvas);
+  color: var(--ssud-text);
+  color-scheme: dark;
+  font: var(--ssud-text-body)/1.4 var(--ssud-font);
+}
+.ssud-ui *, .ssud-ui *::before, .ssud-ui *::after { box-sizing: border-box; }
+.ssud-ui [hidden] { display: none !important; }
+.ssud-ui :where(h1, h2, h3, p, dl, dd) { margin: 0; }
+.ssud-ui :where(button, input, select, textarea, summary) { font: inherit; color: inherit; }
+.ssud-ui :where(button, select, summary, input[type="checkbox"], input[type="radio"]) { cursor: pointer; }
+.ssud-ui :disabled { opacity: .65; cursor: default; }
+.ssud-ui :focus-visible { outline: 2px solid var(--ssud-focus); outline-offset: 2px; }
+.ssud-ui :where(button, input:not([type="checkbox"], [type="radio"]), select, textarea) {
+  padding: 6px 10px;
+  min-width: 0;
+  border: 1px solid var(--ssud-control-border);
+  border-radius: var(--ssud-radius);
+  background: var(--ssud-input);
+}
+.ssud-ui a, .ssud-ui .text-button { color: var(--ssud-accent); }
+.ssud-ui .primary { background: var(--ssud-primary); border-color: var(--ssud-primary-border); color: white; }
+.ssud-ui .primary:hover:not(:disabled) { background: var(--ssud-primary-hover); }
+.ssud-ui .secondary { background: var(--ssud-secondary); }
+.ssud-ui .secondary:hover:not(:disabled) { background: var(--ssud-secondary-hover); }
+.ssud-ui .danger { background: var(--ssud-danger); border-color: var(--ssud-danger-border); color: white; }
+.ssud-ui .text-button { min-height: 24px; padding: 2px; border: 0; background: none; text-align: start; }
+.ssud-ui .text-button:hover { text-decoration: underline; }
+.ssud-ui .icon-button { min-width: 28px; min-height: 28px; padding: 2px 5px; }
+.ssud-ui :where(input[type="checkbox"], input[type="radio"], progress) { accent-color: var(--ssud-accent); }
+.ssud-ui .muted { color: var(--ssud-muted); }
+.ssud-ui .error-text { color: var(--ssud-error); }
+.ssud-ui .success-text { color: var(--ssud-success); }
+.ssud-ui .warning-text { color: var(--ssud-warning); }
+.ssud-ui .actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.ssud-ui .field { display: grid; gap: 5px; min-width: 0; }
+.ssud-ui .field :where(input:not([type="checkbox"], [type="radio"]), select, textarea) { width: 100%; }
+.ssud-ui .field :where(small, p) { overflow-wrap: anywhere; }
+.ssud-ui [aria-invalid="true"] { border-color: var(--ssud-error); }
+.ssud-ui .panel { padding: 14px; min-width: 0; border: 1px solid var(--ssud-border); border-radius: var(--ssud-radius); background: var(--ssud-panel); }
+.ssud-ui .notice-box { padding: 10px 12px; border: 1px solid currentColor; border-radius: var(--ssud-radius); overflow-wrap: anywhere; }
+.ssud-ui dialog {
+  width: min(520px, calc(100% - 32px)); max-height: 85dvh; padding: 18px;
+  color: inherit; background: var(--ssud-overlay); border: 1px solid var(--ssud-overlay-border);
+  border-radius: var(--ssud-overlay-radius); overflow-wrap: anywhere;
+}
+.ssud-ui dialog::backdrop { background: #0009; }
+.ssud-ui dialog .actions { justify-content: end; margin-top: 16px; }
+.ssud-ui .table-region { overflow: auto; min-width: 0; }
+.ssud-ui .data-table { width: 100%; border-collapse: collapse; }
+.ssud-ui .data-table :where(th, td) { padding: 6px 10px; text-align: start; border-bottom: 1px solid var(--ssud-border); }
+.ssud-ui .data-table th { background: var(--ssud-table-header); }
+.ssud-ui .action-list { display: grid; width: max-content; max-width: 100%; gap: 3px; background: var(--ssud-overlay); padding: 4px; border: 1px solid var(--ssud-overlay-border); border-radius: var(--ssud-overlay-radius); }
+.ssud-ui .action-list button { text-align: start; min-height: 28px; }
+.ssud-ui .kit-nav { display: flex; align-items: center; flex-wrap: wrap; gap: 4px 12px; font-size: var(--ssud-text-small); }
+.ssud-ui .kit-nav a { display: inline-flex; min-height: 24px; align-items: center; }
+.ssud-ui .kit-nav [aria-current="page"] { color: var(--ssud-text); font-weight: 600; }
+.ssud-ui [popover]:not(:popover-open) { display: none; }
+.ssud-ui fieldset { min-width: 0; margin: 0; border: 1px solid var(--ssud-border); }
+.ssud-ui legend { padding-inline: 4px; }
+.ssud-ui .file-pick { display: grid; gap: 6px; padding: 12px; border: 1px dashed var(--ssud-control-border); border-radius: var(--ssud-radius); }
+.ssud-ui .file-pick input { width: 100%; }
+.ssud-ui .empty-state { padding: 14px; text-align: center; }
+.ssud-ui [role="tab"][aria-selected="true"] { background: var(--ssud-active); }
+.ssud-ui .stack { display: grid; gap: 12px; min-width: 0; }
+
+/* A workspace keeps one set of controls and rows at every width. */
+.ssud-ui .workspace-shell {
+  display: grid;
+  height: 100dvh;
+  grid-template: "rail links" auto "rail heading" auto "rail content" minmax(0, 1fr)
+    / var(--ssud-sidebar-width) minmax(0, 1fr);
+}
+.ssud-ui .workspace-shell:has(> .workspace-rail[hidden]) {
+  grid-template-columns: 0 minmax(0, 1fr);
+}
+.ssud-ui .workspace-links { grid-area: links; }
+.ssud-ui .workspace-heading { grid-area: heading; }
+.ssud-ui .workspace-rail { grid-area: rail; min-height: 0; overflow-y: auto; }
+.ssud-ui .workspace-content {
+  grid-area: content; display: flex; flex-direction: column; min-height: 0; min-width: 0;
+  padding-bottom: var(--ssud-space-panel);
+}
+.ssud-ui .workspace-shell > :is(.workspace-links, .workspace-heading, .workspace-content) {
+  padding-inline: var(--ssud-space-page);
+}
+.ssud-ui .filter-fields { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
+.ssud-ui .disclosure-toggle::after { content: " ▾" / ""; }
+.ssud-ui .disclosure-toggle[aria-expanded="true"]::after { content: " ▴" / ""; }
+.ssud-ui .row-actions {
+  position: fixed; margin: 0; width: max-content; max-width: min(290px, calc(100vw - 16px));
+  max-height: calc(100dvh - 16px); overflow: auto; overflow-wrap: anywhere;
+}
+.ssud-ui .row-details { border-bottom: 1px solid var(--ssud-border); padding: 6px; font-size: var(--ssud-text-small); }
+.ssud-ui .row-details strong { display: block; }
+.ssud-ui .responsive-dialog { overflow: auto; }
+
+@media (max-width: 650px) {
+  .ssud-ui .workspace-shell, .ssud-ui .workspace-shell:has(> .workspace-rail[hidden]) {
+    grid-template: "links" auto "heading" auto "rail" auto "content" minmax(300px, 1fr) / minmax(0, 1fr);
+    padding-inline: env(safe-area-inset-left) env(safe-area-inset-right);
+  }
+  .ssud-ui .workspace-shell > :is(.workspace-links, .workspace-heading, .workspace-content) { padding-inline: 10px; }
+  .ssud-ui .workspace-content { padding-bottom: max(10px, env(safe-area-inset-bottom)); }
+  .ssud-ui .filter-fields { flex-basis: 100%; }
+  .ssud-ui .responsive-list { width: 100%; min-width: 0; table-layout: fixed; }
+  .ssud-ui .responsive-list .optional-column { display: none; }
+  .ssud-ui .responsive-list .size-column { width: 66px; }
+  .ssud-ui .responsive-list .action-column { width: 48px; }
+  .ssud-ui .responsive-list :is(th, td) { padding: 4px 6px; }
+  .ssud-ui .responsive-list .action-heading { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  .ssud-ui .responsive-list .row-title { white-space: normal; overflow-wrap: anywhere; }
+  .ssud-ui .responsive-dialog {
+    margin: auto 0 0; width: 100%; max-width: 100%; max-height: 90dvh;
+    padding: 16px max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+    border-radius: var(--ssud-overlay-radius) var(--ssud-overlay-radius) 0 0;
+  }
+}
+@media (pointer: coarse) {
+  .ssud-ui :is(.workspace-shell, .row-actions, .responsive-dialog) :is(button, input:not([hidden]), select, summary) { min-height: 40px; }
+  .ssud-ui .responsive-list .icon-button { min-width: 36px; }
+}
+
+@media (max-height: 535px) {
+  .ssud-ui .workspace-shell { height: auto; min-height: 100dvh; }
+}
+
+.ssud-ui .adaptive-page {
+  padding-inline: max(var(--ssud-space-page), env(safe-area-inset-left)) max(var(--ssud-space-page), env(safe-area-inset-right));
+  padding-block: max(14px, env(safe-area-inset-top)) max(28px, env(safe-area-inset-bottom));
+}
+.ssud-ui .adaptive-columns {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start; gap: var(--ssud-space-panel);
+}
+.ssud-ui .adaptive-columns > * { min-width: 0; }
+.ssud-ui .adaptive-wide { grid-column: 1 / -1; }
+
+@media (max-width: 650px) {
+  .ssud-ui .adaptive-columns { grid-template-columns: minmax(0, 1fr); }
+}
+@media (pointer: coarse) {
+  .ssud-ui .adaptive-page :is(button, select, input:not([type="checkbox"], [type="radio"]), summary, .kit-nav a, .touch-choice),
+  .ssud-ui .responsive-dialog button { min-height: 44px; }
+  .ssud-ui .adaptive-page :is(input:not([type="checkbox"], [type="radio"]), select, textarea) { font-size: 1rem; }
+  .ssud-ui .touch-choice { display: flex; align-items: center; gap: 6px; }
+}
