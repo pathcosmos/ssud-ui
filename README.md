@@ -10,6 +10,8 @@ SSUD UI packages the design of Samba Search, Upload & Download as a portable Age
 
 ## The SSUD style
 
+The design was deliberately guided to minimize the generic, templated feel often associated with AI-generated interfaces. SSUD UI aims for a natural, purpose-built work tool, with layout and copy shaped by actual file operations. See the [design intent and practical guidance](skills/ssud-ui/references/DESIGN.md#design-intent).
+
 - **Quiet surfaces.** Charcoal panels, thin borders, small corner radii, and muted metadata keep the focus on files and controls.
 - **Dense, readable data.** Compact rows, fixed table headers, and aligned sizes and dates make lists easy to scan.
 - **Clear actions.** Blue highlights Upload and download links. Row menus keep secondary commands near each file.

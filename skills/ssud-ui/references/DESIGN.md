@@ -1,5 +1,14 @@
 # SSUD UI design guide
 
+## Design intent
+
+SSUD UI was deliberately guided to feel as little like a generic AI-generated interface as possible. Carry that intent into reuse by making each layout, control, and label serve the workspace's actual tasks.
+
+- Build the hierarchy around the current path, file operations, search results, and storage state. Use tables or compact groups where users need to compare data; reserve cards for information that benefits from a separate container.
+- Keep decoration restrained. Avoid ornamental gradients, glow effects, oversized headings, excessive rounding, and repeated cards that add no useful grouping. Use emphasis to identify actions, state, and navigation.
+- Write direct labels and specific feedback: Upload, Back to results, or a transfer's filename and progress. Avoid promotional headings, filler descriptions, and exaggerated success messages in routine workflows.
+- Follow the host product's terminology and interaction conventions. Judge additions against realistic file tasks and data, including long names, empty results, and recoverable failures.
+
 ## Layout and visual hierarchy
 
 Use a dark utility workspace with system fonts, light neutral text, muted metadata, blue actions, thin borders, and 3–4 px radii. Use 14 px for file rows and controls, 12 px for supporting labels, and an 18 px page heading. Keep copy functional. Let the workspace title, current path, and primary action orient the user.
