@@ -1,0 +1,45 @@
+.ssud-ui {
+  --ssud-font: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --ssud-text-small: .75rem;
+  --ssud-text-body: .875rem;
+  --ssud-text-title: 1.125rem;
+  --ssud-sidebar-width: 190px;
+  --ssud-row-height: 35px;
+  --ssud-radius: 3px;
+  --ssud-overlay-radius: 4px;
+  --ssud-space-tight: 6px;
+  --ssud-space-control: 8px;
+  --ssud-space-panel: 12px;
+  --ssud-space-page: 16px;
+
+  --ssud-canvas: #16191f;
+  --ssud-sidebar: #11151b;
+  --ssud-panel: #1c2027;
+  --ssud-overlay: #1c232d;
+  --ssud-table-header: #242b35;
+  --ssud-navigation: #202936;
+  --ssud-input: #13171e;
+  --ssud-text: #e1e5ec;
+  --ssud-muted: #a0a8b4;
+  --ssud-border: #343a45;
+  --ssud-control-border: #495363;
+  --ssud-overlay-border: #515e72;
+  --ssud-accent: #9dbbeb;
+  --ssud-primary: #39669f;
+  --ssud-primary-border: #537fb8;
+  --ssud-primary-hover: #4779b6;
+  --ssud-secondary: #282f3a;
+  --ssud-secondary-hover: #343f4e;
+  --ssud-danger: #833b3b;
+  --ssud-danger-border: #a15652;
+  --ssud-error: #ffb2aa;
+  --ssud-row-hover: #232d3b;
+  --ssud-active: #26364c;
+
+  --ssud-capacity-track: #2c3440;
+  --ssud-capacity-used: #778699;
+  --ssud-capacity-available: #65b99b;
+  --ssud-capacity-restricted: #d4ad68;
+  --ssud-capacity-home: #80ace9;
+  --ssud-capacity-quota: #b69be1;
+}
